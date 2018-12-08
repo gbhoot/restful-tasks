@@ -9,32 +9,40 @@ import { HttpService } from './http.service';
 
 export class AppComponent implements OnInit {
   // title = 'Restful Tasks API';
-  num: number;
-  randNum: number;
-  str: string;
-  first_name: string;
   tasks = [];
+  showAll: boolean = false;
+  showInd: boolean = false;
+  task = {};
   constructor(private _httpService: HttpService){}
 
   // ngOnInit will run when the component is initialized,
   // after the constructor method
   ngOnInit() {
-    this.getTasksFromService();
-    this.num = 7;
-    this.randNum = Math.floor(Math.random() * 2) + 1;
-    this.str = "Hello Angular Developer!";
-    this.first_name = "Alpha";
+    this.getAllTasks();
   }
 
-  getTasksFromService() {
+  getAllTasks() {
     let observable = this._httpService.getTasks();
     observable.subscribe(data => {
-      console.log("Got our tasks!", data);
-      // In this example, the array of tasks is assigned to the key
-      // 'tasks' in the data object.
-      // This may be different for you, depending on how you set up
-      // your Task API
       this.tasks = data['tasks'];
+    });
+  }
+
+  getBtnPressed() {
+    if (this.showAll) {
+      this.showAll = false;
+    } else {
+      this.showAll = true;
+    }
+  }
+
+  showBtnPressed(event: any): void {
+    let html = event['path'][0]
+    let tid = html['id'];
+    let observable = this._httpService.getOne(tid)
+    observable.subscribe(data => {
+      this.task = data['task'];
+      this.showInd = true;
     });
   }
 }
