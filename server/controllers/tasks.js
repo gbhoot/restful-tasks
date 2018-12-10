@@ -18,25 +18,34 @@ module.exports = {
     create: function(req, res) {
         console.log(req.body);
         let inc_task = req.body;
-        let task = new Task({title: inc_task.title, description: inc_task.description,
-            completed: inc_task.completed});
+        let task = new Task({title: inc_task.title, description: inc_task.description});
         task.save(function(error, task) {
             if (error) {
                 console.log("There was an issue: ", error);
                 res.json(error);
             } else {
-                res.redirect('/');
+                let response = {
+                    message: "Success",
+                    task: task
+                };
+                res.json(response);
             }
         });
     },
 
     destroy: function(req, res) {
         let tid = req.params.id;
+        console.log(tid);
         Task.remove({_id: tid}, function(error, task) {
             if (error) {
                 console.log("There was an issue: ", error);
+                res.json(error);
             } else {
-                res.redirect('/');
+                let response = {
+                    message: "Success",
+                    task: task
+                };
+                res.json(response);
             }
         });
     },
@@ -49,8 +58,13 @@ module.exports = {
         Task.updateOne({_id: tid}, {$set: taskD}, function(error, task) {
             if (error) {
                 console.log("There was an issue: ", error);
+                res.json(error);
             } else {
-                res.redirect('/');
+                let response = {
+                    message: "Success",
+                    task: task
+                };
+                res.json(response);
             }
         });
     },
@@ -60,6 +74,7 @@ module.exports = {
         Task.findOne({_id: tid}, function(error, task) {
             if (error) {
                 console.log("There was an issue: ", error);
+                res.json(error);
             } else {
                 let response = {
                     message: "Success",

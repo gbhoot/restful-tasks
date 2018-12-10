@@ -20,14 +20,14 @@ export class HttpService {
   getOne(tid: string) {
     return this._http.get('/tasks/'+ tid);
   }
-  // deleteOne() {
-  //   let tempObservable = this._http.delete('/tasks/:id');
-  //   tempObservable.subscribe(data => console.log("Deleted a task, ", data));
-  // }
-  updateOne() {
-    let tempObservable = this._http.put('/tasks/5c09aced4eea35211cca8bec', {
-      completed: false
-    });
-    tempObservable.subscribe(data => console.log("Updated a task, ", data));
+  updateOne(tid: string, taskD) {
+    console.log(tid);
+    return this._http.put('/tasks/'+ tid, taskD);
+  }
+  deleteOne(tid: string) {
+    return this._http.delete('/tasks/'+ tid)
+  }
+  createOne(taskD: any) {
+    return this._http.post('/tasks', taskD);
   }
 }
