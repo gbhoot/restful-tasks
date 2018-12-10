@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
   // title = 'Restful Tasks API';
   tasks = [];
   showAll: boolean = false;
-  showInd: boolean = false;
+  tidShown: string = "";
   task = {};
   constructor(private _httpService: HttpService){}
 
@@ -31,6 +31,7 @@ export class AppComponent implements OnInit {
   getBtnPressed() {
     if (this.showAll) {
       this.showAll = false;
+      this.task = {};
     } else {
       this.showAll = true;
     }
@@ -39,10 +40,15 @@ export class AppComponent implements OnInit {
   showBtnPressed(event: any): void {
     let html = event['path'][0]
     let tid = html['id'];
-    let observable = this._httpService.getOne(tid)
-    observable.subscribe(data => {
-      this.task = data['task'];
-      this.showInd = true;
-    });
+    if (tid != this.tidShown) {
+      this.tidShown = tid;
+      let observable = this._httpService.getOne(tid)
+      observable.subscribe(data => {
+        this.task = data['task'];
+      });
+    } else {
+      this.task = {};
+      this.tidShown = "";
+    }
   }
 }
